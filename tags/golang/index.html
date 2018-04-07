@@ -157,6 +157,33 @@
         <div class="posts-list">
           
             <article class="post-preview">
+              <a href="https://lujinda.github.io/post/golang%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E4%B8%80%E8%A1%8C/">
+                <h2 class="post-title">Golang实现随机读取文件一行</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                Posted on April 7, 2018
+              </p>
+              <div class="post-entry">
+                
+                  func RandReadOneLine(filename string) (string, error) { fd, err := os.Open(filename) if err != nil { return &#34;&#34;, err } defer fd.Close() var ( initPos, startPos, endPos int64 buf = make([]byte, 1) ) size, err := fd.Seek(0, 2) if err != nil { return &#34;&#34;, err } if size == 0 { return &#34;&#34;, nil } rand.Seed(time.Now().UnixNano()) initPos = rand.Int63n(size - 1) startPos, endPos = initPos, initPos fd.Seek(initPos, 0) for startPos &gt; 0 { fd.
+                  <a href="https://lujinda.github.io/post/golang%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E4%B8%80%E8%A1%8C/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+                <span class="post-meta">
+                  
+                    #<a href="https://lujinda.github.io/tags/golang/">golang</a>&nbsp;
+                  
+                </span>
+              
+
+            </article>
+          
+            <article class="post-preview">
               <a href="https://lujinda.github.io/post/grpc%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E8%BE%83%E5%A4%8D%E6%9D%82%E7%9A%84%E8%81%8A%E5%A4%A9%E5%AE%A4/">
                 <h2 class="post-title">Grpc实现一个较复杂的聊天室</h2>
 
