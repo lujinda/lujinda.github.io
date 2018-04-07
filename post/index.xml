@@ -7,10 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>tuxpy01@gmail.com (tuxpy)</managingEditor>
     <webMaster>tuxpy01@gmail.com (tuxpy)</webMaster>
-    <lastBuildDate>Sat, 07 Apr 2018 14:47:11 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 07 Apr 2018 15:33:33 +0800</lastBuildDate>
     
 	<atom:link href="https://lujinda.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Grpc实现一个较复杂的聊天室</title>
+      <link>https://lujinda.github.io/post/grpc%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E8%BE%83%E5%A4%8D%E6%9D%82%E7%9A%84%E8%81%8A%E5%A4%A9%E5%AE%A4/</link>
+      <pubDate>Sat, 07 Apr 2018 15:33:33 +0800</pubDate>
+      <author>tuxpy01@gmail.com (tuxpy)</author>
+      <guid>https://lujinda.github.io/post/grpc%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E8%BE%83%E5%A4%8D%E6%9D%82%E7%9A%84%E8%81%8A%E5%A4%A9%E5%AE%A4/</guid>
+      <description>背景 接上文 https://my.oschina.net/tuxpy/blog/1631953
+之前通过grpc实现了一个双向流的方式来实现聊天室. 所有的stream都是存在一个sync.Map里。如果这时候聊天室的压力大了，如何做扩展? 说得简单点就是怎么样来做负载均衡。之前在https://segmentfault.com/a/1190000008672912 看到过一篇借助etcd来实现负载均衡的文章，就借来实现了哈.
+问题  grpc的服务发现如何做? 某一个client发送的聊天内容，如何让分布在不同的节点上的client都收到 当某些client连接的service节点down了，如何让client重新发现并连接健康的节点? 如果所有的rpc方法都是request &amp;lt;-&amp;gt; response模式 倒没什么问题，大不了有可能会丢次当前正在处理的请求. 但是像聊天室这类应用，使用双向流模式, 一旦一个节点down了，后续服务端的stream就会得到codes.Unavailable错误  解决  参考https://segmentfault.com/a/1190000008672912 。服务端注册key, 定期keepalive, 客户端watch 利用etcd的put + watch实现一个remote channel，所有服务节点监听某一个key的PUT行为，根据value内容调用相应的方法(如广播消息给连接到自己的所有客户端). 之前还想过，每一个service同时还是一个grpc client，每次自己有广播行为时, 远程调用其他节点广播操作。天呐，还要维护一份所有节点的清单，杀了我吧. 将身份验证操作和聊天操作分离出来，先进行身份验证，取出token, 后续聊天的rpc调用时带上. token验证借助etcd实现的session, 每次断线重连，只影响聊天的stream， 不会重复登录.  实现 service /* * * Author : tuxpy * Email : q8886888@qq.com.com * Create time : 3/7/18 9:18 AM * Filename : service.go * Description : * * */ package main import ( &amp;#34;bytes&amp;#34; &amp;#34;context&amp;#34; &amp;#34;crypto/rand&amp;#34; &amp;#34;encoding/gob&amp;#34; &amp;#34;encoding/hex&amp;#34; &amp;#34;encoding/json&amp;#34; &amp;#34;flag&amp;#34; &amp;#34;fmt&amp;#34; grpclb &amp;#34;grpclb/etcdv3&amp;#34; pb &amp;#34;grpclb/helloword&amp;#34; &amp;#34;io&amp;#34; &amp;#34;log&amp;#34; &amp;#34;net&amp;#34; &amp;#34;os&amp;#34; &amp;#34;os/signal&amp;#34; &amp;#34;strings&amp;#34; &amp;#34;sync&amp;#34; &amp;#34;syscall&amp;#34; &amp;#34;time&amp;#34; &amp;#34;utils&amp;#34; &amp;#34;github.</description>
+    </item>
     
     <item>
       <title>First Blog</title>
