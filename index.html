@@ -288,6 +288,60 @@
               
             </article>
           
+            <article class="post-preview">
+              <a href="https://lujinda.github.io/post/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%A7%A3%E5%86%B3zombie%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B/">
+                <h2 class="post-title">记一次解决zombie(僵尸进程)</h2>
+                
+                
+              </a>
+
+              <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on April 7, 2018
+  
+  
+  &nbsp;|&nbsp;
+  <i class="fa fa-clock-o"></i> 1 minutes (15 words)
+  
+  
+</span>
+
+
+              <div class="post-entry">
+                
+                  
+
+<h2 id="什么情况下会产生zombie进程">什么情况下会产生zombie进程?</h2>
+
+<p>在子进程结束时，父进程还存在，并且父进程没有去处理SIGCHLD信号或者没有调用waitpid()</p>
+
+<h2 id="解决方案">解决方案</h2>
+
+<ul>
+<li>统计当前进程下有多个zombie进程，如果过多就自杀并重启程序本身 (该方案只是个玩笑~~~)</li>
+
+<li><p>在主进程中处理SIGCHLD, 忽略掉该信号(每当子进程退出时，都会给主进程发送SIGCHLD信息)
+&gt; signal.signal(signal.SIGCHLD, signal.SIG_IGN)</p></li>
+
+<li><p>kill行为发生在主进程时, 在主进程中进行waitpid(子进程pid)
+&gt; os.waitpid(pid, 0)</p></li>
+</ul>
+
+                
+              </div>
+
+              
+                <span class="post-meta">
+                
+                  #<a href="https://lujinda.github.io/tags/python/">python</a>&nbsp;
+                
+                  #<a href="https://lujinda.github.io/tags/linux/">linux</a>&nbsp;
+                
+                </span>
+              
+            </article>
+          
         </div>
 
         

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on 疯狂的小企鹅</title>
+    <link>https://lujinda.github.io/tags/linux/</link>
+    <description>Recent content in Linux on 疯狂的小企鹅</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <managingEditor>tuxpy01@gmail.com (tuxpy)</managingEditor>
+    <webMaster>tuxpy01@gmail.com (tuxpy)</webMaster>
+    <lastBuildDate>Sat, 07 Apr 2018 14:47:11 +0800</lastBuildDate>
+    
+	<atom:link href="https://lujinda.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>记一次解决zombie(僵尸进程)</title>
+      <link>https://lujinda.github.io/post/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%A7%A3%E5%86%B3zombie%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B/</link>
+      <pubDate>Sat, 07 Apr 2018 14:47:11 +0800</pubDate>
+      <author>tuxpy01@gmail.com (tuxpy)</author>
+      <guid>https://lujinda.github.io/post/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%A7%A3%E5%86%B3zombie%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B/</guid>
+      <description> 什么情况下会产生zombie进程? 在子进程结束时，父进程还存在，并且父进程没有去处理SIGCHLD信号或者没有调用waitpid()
+解决方案  统计当前进程下有多个zombie进程，如果过多就自杀并重启程序本身 (该方案只是个玩笑~~~) 在主进程中处理SIGCHLD, 忽略掉该信号(每当子进程退出时，都会给主进程发送SIGCHLD信息) &amp;gt; signal.signal(signal.SIGCHLD, signal.SIG_IGN)
+ kill行为发生在主进程时, 在主进程中进行waitpid(子进程pid) &amp;gt; os.waitpid(pid, 0)
+  </description>
+    </item>
+    
+  </channel>
+</rss>
