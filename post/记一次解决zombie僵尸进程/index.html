@@ -193,11 +193,11 @@
       <article role="main" class="blog-post">
         
 
-<h2 id="什么情况下会产生zombie进程">什么情况下会产生zombie进程?</h2>
+<h3 id="什么情况下会产生zombie进程">什么情况下会产生zombie进程?</h3>
 
 <p>在子进程结束时，父进程还存在，并且父进程没有去处理SIGCHLD信号或者没有调用waitpid()</p>
 
-<h2 id="解决方案">解决方案</h2>
+<h3 id="解决方案">解决方案</h3>
 
 <ul>
 <li>统计当前进程下有多个zombie进程，如果过多就自杀并重启程序本身 (该方案只是个玩笑~~~)</li>
