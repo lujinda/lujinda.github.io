@@ -5,9 +5,27 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Tags</title>
-  <meta property="og:title" content="Tags" />
-  <meta name="twitter:title" content="Tags" />
+  <title>consul实现grpc服务发现</title>
+  <meta property="og:title" content="consul实现grpc服务发现" />
+  <meta name="twitter:title" content="consul实现grpc服务发现" />
+  <meta name="description" content="根据consule的健康服务检查实现服务注册和发现。
+启动: service run:
+ go run server/server.go &ndash;port 6060
+ client run:
+ go run client/client.go
+ 项目 https://github.com/lujinda/grpc_and_consul">
+  <meta property="og:description" content="根据consule的健康服务检查实现服务注册和发现。
+启动: service run:
+ go run server/server.go &ndash;port 6060
+ client run:
+ go run client/client.go
+ 项目 https://github.com/lujinda/grpc_and_consul">
+  <meta name="twitter:description" content="根据consule的健康服务检查实现服务注册和发现。
+启动: service run:
+ go run server/server.go &ndash;port 6060
+ client run:
+ go run client/client.go
+ 项目 https://github.com/lujinda/grpc_and_consul">
   <meta name="author" content="tuxpy"/>
   <link href='https://lujinda.github.io/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://lujinda.github.io/img/avatar-icon.jpeg" />
@@ -15,13 +33,13 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@tuxpy" />
   <meta name="twitter:creator" content="@tuxpy" />
-  <meta property="og:url" content="https://lujinda.github.io/tags/" />
+  <meta property="og:url" content="https://lujinda.github.io/post/consul%E5%AE%9E%E7%8E%B0grpc%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="疯狂的小企鹅" />
 
   <meta name="generator" content="Hugo 0.39-DEV" />
-  <link rel="canonical" href="https://lujinda.github.io/tags/" />
-  <link rel="alternate" href="https://lujinda.github.io/tags/index.xml" type="application/rss+xml" title="疯狂的小企鹅">
+  <link rel="canonical" href="https://lujinda.github.io/post/consul%E5%AE%9E%E7%8E%B0grpc%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/" />
+  <link rel="alternate" href="https://lujinda.github.io/index.xml" type="application/rss+xml" title="疯狂的小企鹅">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -150,9 +168,23 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="tags-heading">
-              <h1>Tags</h1>
+            <div class="post-heading">
+              <h1>consul实现grpc服务发现</h1>
                 
+                
+                  <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on April 11, 2018
+  
+  
+  &nbsp;|&nbsp;
+  <i class="fa fa-clock-o"></i> 1 minutes (16 words)
+  
+  
+</span>
+
+
                 
             </div>
           </div>
@@ -163,162 +195,55 @@
 
 
     
-
-
-
 <div class="container" role="main">
-  <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1"> 
-    <article class="post-preview">
-      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
         
-          <div class="panel panel-default">
-            <a class="collapsed" role="button" data-toggle="collapse" data-target="#collapsegolang" data-parent="#accordion"
-               href="#" aria-expanded="false" aria-controls="collapsegolang">
-                <div class="panel-heading" role="tab" id="headergolang">
-                  <h4 class="panel-title">
-                      golang
-                    <span class="badge">2</span>
-                  </h4>
-                </div>
-            </a>
-            <div id="collapsegolang" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headinggolang">
-              <div class="panel-body">
-                <a href="https://lujinda.github.iotags/golang/" class="list-group-item view-all">
-                View all</a>
-                <div class="list-group">
-                  
-                    <a href="https://lujinda.github.io/post/golang%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%E4%B8%80%E8%A1%8C/" class="list-group-item">Golang实现随机读取文件一行</a>
-                  
-                    <a href="https://lujinda.github.io/post/grpc%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E8%BE%83%E5%A4%8D%E6%9D%82%E7%9A%84%E8%81%8A%E5%A4%A9%E5%AE%A4/" class="list-group-item">Grpc实现一个较复杂的聊天室</a>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
+
+<p><strong>根据consule的健康服务检查实现服务注册和发现。</strong></p>
+
+<h3 id="启动">启动:</h3>
+
+<p>service run:</p>
+
+<blockquote>
+<p>go run server/server.go &ndash;port 6060</p>
+</blockquote>
+
+<p>client run:</p>
+
+<blockquote>
+<p>go run client/client.go</p>
+</blockquote>
+
+<h3 id="项目">项目</h3>
+
+<p><a href="https://github.com/lujinda/grpc_and_consul">https://github.com/lujinda/grpc_and_consul</a></p>
+
         
-          <div class="panel panel-default">
-            <a class="collapsed" role="button" data-toggle="collapse" data-target="#collapsegrpc" data-parent="#accordion"
-               href="#" aria-expanded="false" aria-controls="collapsegrpc">
-                <div class="panel-heading" role="tab" id="headergrpc">
-                  <h4 class="panel-title">
-                      grpc
-                    <span class="badge">2</span>
-                  </h4>
-                </div>
-            </a>
-            <div id="collapsegrpc" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headinggrpc">
-              <div class="panel-body">
-                <a href="https://lujinda.github.iotags/grpc/" class="list-group-item view-all">
-                View all</a>
-                <div class="list-group">
-                  
-                    <a href="https://lujinda.github.io/post/consul%E5%AE%9E%E7%8E%B0grpc%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/" class="list-group-item">consul实现grpc服务发现</a>
-                  
-                    <a href="https://lujinda.github.io/post/grpc%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E8%BE%83%E5%A4%8D%E6%9D%82%E7%9A%84%E8%81%8A%E5%A4%A9%E5%AE%A4/" class="list-group-item">Grpc实现一个较复杂的聊天室</a>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://lujinda.github.io/post/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%A7%A3%E5%86%B3zombie%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B/" data-toggle="tooltip" data-placement="top" title="记一次解决zombie(僵尸进程)">&larr; Previous Post</a>
+            </li>
+          
+          
+        </ul>
+      
+
+
+      
         
-          <div class="panel panel-default">
-            <a class="collapsed" role="button" data-toggle="collapse" data-target="#collapseconsul" data-parent="#accordion"
-               href="#" aria-expanded="false" aria-controls="collapseconsul">
-                <div class="panel-heading" role="tab" id="headerconsul">
-                  <h4 class="panel-title">
-                      consul
-                    <span class="badge">1</span>
-                  </h4>
-                </div>
-            </a>
-            <div id="collapseconsul" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingconsul">
-              <div class="panel-body">
-                <a href="https://lujinda.github.iotags/consul/" class="list-group-item view-all">
-                View all</a>
-                <div class="list-group">
-                  
-                    <a href="https://lujinda.github.io/post/consul%E5%AE%9E%E7%8E%B0grpc%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/" class="list-group-item">consul实现grpc服务发现</a>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
         
-          <div class="panel panel-default">
-            <a class="collapsed" role="button" data-toggle="collapse" data-target="#collapselinux" data-parent="#accordion"
-               href="#" aria-expanded="false" aria-controls="collapselinux">
-                <div class="panel-heading" role="tab" id="headerlinux">
-                  <h4 class="panel-title">
-                      linux
-                    <span class="badge">1</span>
-                  </h4>
-                </div>
-            </a>
-            <div id="collapselinux" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headinglinux">
-              <div class="panel-body">
-                <a href="https://lujinda.github.iotags/linux/" class="list-group-item view-all">
-                View all</a>
-                <div class="list-group">
-                  
-                    <a href="https://lujinda.github.io/post/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%A7%A3%E5%86%B3zombie%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B/" class="list-group-item">记一次解决zombie(僵尸进程)</a>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        
-          <div class="panel panel-default">
-            <a class="collapsed" role="button" data-toggle="collapse" data-target="#collapseother" data-parent="#accordion"
-               href="#" aria-expanded="false" aria-controls="collapseother">
-                <div class="panel-heading" role="tab" id="headerother">
-                  <h4 class="panel-title">
-                      other
-                    <span class="badge">1</span>
-                  </h4>
-                </div>
-            </a>
-            <div id="collapseother" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingother">
-              <div class="panel-body">
-                <a href="https://lujinda.github.iotags/other/" class="list-group-item view-all">
-                View all</a>
-                <div class="list-group">
-                  
-                    <a href="https://lujinda.github.io/post/first-blog/" class="list-group-item">First Blog</a>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        
-          <div class="panel panel-default">
-            <a class="collapsed" role="button" data-toggle="collapse" data-target="#collapsepython" data-parent="#accordion"
-               href="#" aria-expanded="false" aria-controls="collapsepython">
-                <div class="panel-heading" role="tab" id="headerpython">
-                  <h4 class="panel-title">
-                      python
-                    <span class="badge">1</span>
-                  </h4>
-                </div>
-            </a>
-            <div id="collapsepython" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingpython">
-              <div class="panel-body">
-                <a href="https://lujinda.github.iotags/python/" class="list-group-item view-all">
-                View all</a>
-                <div class="list-group">
-                  
-                    <a href="https://lujinda.github.io/post/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%A7%A3%E5%86%B3zombie%E5%83%B5%E5%B0%B8%E8%BF%9B%E7%A8%8B/" class="list-group-item">记一次解决zombie(僵尸进程)</a>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        
-      </div>
-    </article>
+      
+
+    </div>
   </div>
 </div>
-
-
 
     <footer>
   <div class="container">
@@ -353,7 +278,7 @@
           
           <li>
             
-            <a href="https://lujinda.github.io/tags/index.xml" title="RSS">
+            <a href="https://lujinda.github.io/index.xml" title="RSS">
             
               <span class="fa-stack fa-lg">
                 <i class="fa fa-circle fa-stack-2x"></i>
