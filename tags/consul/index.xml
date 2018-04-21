@@ -7,10 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>tuxpy01@gmail.com (tuxpy)</managingEditor>
     <webMaster>tuxpy01@gmail.com (tuxpy)</webMaster>
-    <lastBuildDate>Wed, 11 Apr 2018 09:43:01 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 21 Apr 2018 14:09:02 +0800</lastBuildDate>
     
 	<atom:link href="https://lujinda.github.io/tags/consul/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Consul使用grpc做健康检查注意点</title>
+      <link>https://lujinda.github.io/post/consule%E4%BD%BF%E7%94%A8grpc%E5%81%9A%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5%E6%B3%A8%E6%84%8F%E7%82%B9/</link>
+      <pubDate>Sat, 21 Apr 2018 14:09:02 +0800</pubDate>
+      <author>tuxpy01@gmail.com (tuxpy)</author>
+      <guid>https://lujinda.github.io/post/consule%E4%BD%BF%E7%94%A8grpc%E5%81%9A%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5%E6%B3%A8%E6%84%8F%E7%82%B9/</guid>
+      <description>先上个代码片段开胃
+registration := &amp;amp;consulapi.AgentServiceRegistration{ Address: address, Port: port, ID: id, Name: serviceName, Check: &amp;amp;consulapi.AgentServiceCheck{ GRPC: fmt.Sprintf(&amp;#34;%s:%d/%s&amp;#34;, address, port, serviceName), Interval: &amp;#34;3s&amp;#34;, }, } err = cli.Agent().ServiceRegister(registration)  protobuf写一个Health服务: https://github.com/grpc/grpc/blob/master/doc/health-checking.md
+package必须写成grpc.health.v1 &amp;hellip; consul源代码里写死了调用grpc的health check https://github.com/hashicorp/consul/blob/master/agent/checks/grpc.go#L65
+HealthCheckRequest中的service字段并不是AgentServiceRegistrationn的Name, 更不是AgentServiceCheck中的Name。看了下源代码才发现，原来是在写GRPC参数时，在endpoint后加个/ https://github.com/hashicorp/consul/blob/master/agent/checks/grpc.go#L29</description>
+    </item>
     
     <item>
       <title>consul实现grpc服务发现</title>

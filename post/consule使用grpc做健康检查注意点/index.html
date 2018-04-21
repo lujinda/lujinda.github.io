@@ -5,9 +5,19 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Consul</title>
-  <meta property="og:title" content="Consul" />
-  <meta name="twitter:title" content="Consul" />
+  <title>Consul使用grpc做健康检查注意点</title>
+  <meta property="og:title" content="Consul使用grpc做健康检查注意点" />
+  <meta name="twitter:title" content="Consul使用grpc做健康检查注意点" />
+  <meta name="description" content="先上个代码片段开胃
+registration := &amp;consulapi.AgentServiceRegistration{ Address: address, Port: port, ID: id, Name: serviceName, Check: &amp;consulapi.AgentServiceCheck{ GRPC: fmt.Sprintf(&#34;%s:%d/%s&#34;, address, port, serviceName), Interval: &#34;3s&#34;, }, } err = cli.Agent().ServiceRegister(registration)  protobuf写一个Health服务: https://github.com/grpc/grpc/blob/master/doc/health-checking.md
+package必须写成grpc.health.v1 &hellip; consul源代码里写死了调用grpc的health check https://github.com/hashicorp/consul/blob/master/agent/checks/grpc.go#L65
+HealthCheckRequest中的service字段并不是AgentServiceRegistrationn的Name, 更不是AgentServiceCheck中的Name。看了下源代码才发现，原来是在写GRPC参数时，在endpoint后加个/ https://github.com/hashicorp/consul/blob/master/agent/checks/grpc.go#L29">
+  <meta property="og:description" content="先上个代码片段开胃
+registration := &amp;consulapi.AgentServiceRegistration{ Address: address, Port: port, ID: id, Name: serviceName, Check: &amp;consulapi.AgentServiceCheck{ GRPC: fmt.Sprintf(&#34;%s:%d/%s&#34;, address, port, serviceName), Interval: &#34;3s&#34;, }, } err = cli.Agent().ServiceRegister(registration)  protobuf写一个Health服务: https://github.com/grpc/grpc/blob/master/doc/health-checking.md
+package必须写成grpc.health.v1 &hellip; consul源代码里写死了调用grpc的health check https://github.com/hashicorp/consul/blob/master/agent/checks/grpc.go#L65
+HealthCheckRequest中的service字段并不是AgentServiceRegistrationn的Name, 更不是AgentServiceCheck中的Name。看了下源代码才发现，原来是在写GRPC参数时，在endpoint后加个/ https://github.com/hashicorp/consul/blob/master/agent/checks/grpc.go#L29">
+  <meta name="twitter:description" content="先上个代码片段开胃
+registration := &amp;consulapi.AgentServiceRegistration{ Address: address, Port: port, ID: id, Name: serviceName, Check: &amp;consulapi.AgentServiceCheck{ GRPC: …">
   <meta name="author" content="tuxpy"/>
   <link href='https://lujinda.github.io/img/favicon.ico' rel='icon' type='image/x-icon'/>
   <meta property="og:image" content="https://lujinda.github.io/img/avatar-icon.jpeg" />
@@ -15,13 +25,13 @@
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:site" content="@tuxpy" />
   <meta name="twitter:creator" content="@tuxpy" />
-  <meta property="og:url" content="https://lujinda.github.io/tags/consul/" />
+  <meta property="og:url" content="https://lujinda.github.io/post/consule%E4%BD%BF%E7%94%A8grpc%E5%81%9A%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5%E6%B3%A8%E6%84%8F%E7%82%B9/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="疯狂的小企鹅" />
 
   <meta name="generator" content="Hugo 0.39-DEV" />
-  <link rel="canonical" href="https://lujinda.github.io/tags/consul/" />
-  <link rel="alternate" href="https://lujinda.github.io/tags/consul/index.xml" type="application/rss+xml" title="疯狂的小企鹅">
+  <link rel="canonical" href="https://lujinda.github.io/post/consule%E4%BD%BF%E7%94%A8grpc%E5%81%9A%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5%E6%B3%A8%E6%84%8F%E7%82%B9/" />
+  <link rel="alternate" href="https://lujinda.github.io/index.xml" type="application/rss+xml" title="疯狂的小企鹅">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -134,14 +144,40 @@
 
 
     
+  
+  
+  
+
+
+
+
+  
+
   <header class="header-section ">
+    
     <div class="intro-header no-img">
+      
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="page-heading">
-              <h1>#Consul</h1>
-              <hr class="small">
+            <div class="post-heading">
+              <h1>Consul使用grpc做健康检查注意点</h1>
+                
+                
+                  <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on April 21, 2018
+  
+  
+  &nbsp;|&nbsp;
+  <i class="fa fa-clock-o"></i> 1 minutes (36 words)
+  
+  
+</span>
+
+
+                
             </div>
           </div>
         </div>
@@ -149,26 +185,13 @@
     </div>
   </header>
 
+
     
-  <div class="container" role="main">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-        
-        <div class="posts-list">
-          
-            <article class="post-preview">
-              <a href="https://lujinda.github.io/post/consule%E4%BD%BF%E7%94%A8grpc%E5%81%9A%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5%E6%B3%A8%E6%84%8F%E7%82%B9/">
-                <h2 class="post-title">Consul使用grpc做健康检查注意点</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                Posted on April 21, 2018
-              </p>
-              <div class="post-entry">
-                
-                  <p>先上个代码片段开胃</p>
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>先上个代码片段开胃</p>
 <div class="highlight"><pre class="chroma">	registration := &amp;consulapi.AgentServiceRegistration{
 		Address: address,
 		Port:    port,
@@ -187,75 +210,29 @@
 
 <p>HealthCheckRequest中的service字段并不是<code>AgentServiceRegistrationn</code>的Name, 更不是<code>AgentServiceCheck</code>中的Name。看了下源代码才发现，原来是在写GRPC参数时，在endpoint后加个/<service>  <a href="https://github.com/hashicorp/consul/blob/master/agent/checks/grpc.go#L29">https://github.com/hashicorp/consul/blob/master/agent/checks/grpc.go#L29</a></p>
 
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="https://lujinda.github.io/tags/grpc/">grpc</a>&nbsp;
-                  
-                    #<a href="https://lujinda.github.io/tags/consul/">consul</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://lujinda.github.io/post/consul%E5%AE%9E%E7%8E%B0grpc%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/">
-                <h2 class="post-title">consul实现grpc服务发现</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                Posted on April 11, 2018
-              </p>
-              <div class="post-entry">
-                
-                  
-
-<p><strong>根据consule的健康服务检查实现服务注册和发现。</strong></p>
-
-<h3 id="启动">启动:</h3>
-
-<p>service run:</p>
-
-<blockquote>
-<p>go run server/server.go &ndash;port 6060</p>
-</blockquote>
-
-<p>client run:</p>
-
-<blockquote>
-<p>go run client/client.go</p>
-</blockquote>
-
-<h3 id="项目">项目</h3>
-
-<p><a href="https://github.com/lujinda/grpc_and_consul">https://github.com/lujinda/grpc_and_consul</a></p>
-
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="https://lujinda.github.io/tags/consul/">consul</a>&nbsp;
-                  
-                    #<a href="https://lujinda.github.io/tags/grpc/">grpc</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-        </div>
         
-      </div>
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://lujinda.github.io/post/consul%E5%AE%9E%E7%8E%B0grpc%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/" data-toggle="tooltip" data-placement="top" title="consul实现grpc服务发现">&larr; Previous Post</a>
+            </li>
+          
+          
+        </ul>
+      
+
+
+      
+        
+        
+      
+
     </div>
   </div>
+</div>
 
     <footer>
   <div class="container">
@@ -290,7 +267,7 @@
           
           <li>
             
-            <a href="https://lujinda.github.io/tags/consul/index.xml" title="RSS">
+            <a href="https://lujinda.github.io/index.xml" title="RSS">
             
               <span class="fa-stack fa-lg">
                 <i class="fa fa-circle fa-stack-2x"></i>

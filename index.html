@@ -177,6 +177,61 @@
           
           
             <article class="post-preview">
+              <a href="https://lujinda.github.io/post/consule%E4%BD%BF%E7%94%A8grpc%E5%81%9A%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5%E6%B3%A8%E6%84%8F%E7%82%B9/">
+                <h2 class="post-title">Consul使用grpc做健康检查注意点</h2>
+                
+                
+              </a>
+
+              <span class="post-meta">
+  
+  
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on April 21, 2018
+  
+  
+  &nbsp;|&nbsp;
+  <i class="fa fa-clock-o"></i> 1 minutes (36 words)
+  
+  
+</span>
+
+
+              <div class="post-entry">
+                
+                  <p>先上个代码片段开胃</p>
+<div class="highlight"><pre class="chroma">	registration := &amp;consulapi.AgentServiceRegistration{
+		Address: address,
+		Port:    port,
+		ID:      id,
+		Name:    serviceName,
+		Check: &amp;consulapi.AgentServiceCheck{
+			GRPC:     fmt.Sprintf(&#34;%s:%d/%s&#34;, address, port, serviceName),
+			Interval: &#34;3s&#34;,
+		},
+	}
+	err = cli.Agent().ServiceRegister(registration)
+	</pre></div>
+<p>protobuf写一个Health服务: <a href="https://github.com/grpc/grpc/blob/master/doc/health-checking.md">https://github.com/grpc/grpc/blob/master/doc/health-checking.md</a></p>
+
+<p>package必须写成<code>grpc.health.v1</code> &hellip; consul源代码里写死了调用grpc的health check  <a href="https://github.com/hashicorp/consul/blob/master/agent/checks/grpc.go#L65">https://github.com/hashicorp/consul/blob/master/agent/checks/grpc.go#L65</a></p>
+
+<p>HealthCheckRequest中的service字段并不是<code>AgentServiceRegistrationn</code>的Name, 更不是<code>AgentServiceCheck</code>中的Name。看了下源代码才发现，原来是在写GRPC参数时，在endpoint后加个/<service>  <a href="https://github.com/hashicorp/consul/blob/master/agent/checks/grpc.go#L29">https://github.com/hashicorp/consul/blob/master/agent/checks/grpc.go#L29</a></p>
+
+                
+              </div>
+
+              
+                <span class="post-meta">
+                
+                  #<a href="https://lujinda.github.io/tags/grpc/">grpc</a>&nbsp;
+                
+                  #<a href="https://lujinda.github.io/tags/consul/">consul</a>&nbsp;
+                
+                </span>
+              
+            </article>
+          
+            <article class="post-preview">
               <a href="https://lujinda.github.io/post/consul%E5%AE%9E%E7%8E%B0grpc%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0/">
                 <h2 class="post-title">consul实现grpc服务发现</h2>
                 
