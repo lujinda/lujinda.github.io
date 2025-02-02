@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旋转白边正方形与小球</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            overflow: hidden;
+        }
+
+        .square {
+            width: 50vw;
+            height: 50vw;
+            border: 2px solid white;
+            position: relative;
+            animation: rotate 10s linear infinite;
+            transform-origin: center;
+        }
+
+        .ball {
+            width: 11px; /* 小球直径调整为 11px */
+            height: 11px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+            transform-origin: center;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="square" id="square"></div>
+
+    <script>
+        const square = document.getElementById('square');
+        const balls = [];
+        const maxBalls = 50; // 最大小球数量调整为 50
+        let ballCount = 0;
+        const ballRadius = 5.5; // 小球半径
+
+        // 生成随机颜色
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // 生成随机方向
+        function getRandomDirection() {
+            return Math.random() * 2 * Math.PI; // 随机角度（弧度）
+        }
+
+        // 创建小球
+        function createBall() {
+            if (ballCount >= maxBalls) return; // 达到最大数量后不再创建
+
+            const ball = document.createElement('div');
+            ball.className = 'ball';
+            ball.style.backgroundColor = getRandomColor();
+            square.appendChild(ball);
+
+            // 初始位置在正方形边缘
+            const squareSize = square.offsetWidth;
+            const angle = getRandomDirection();
+            const startX = squareSize / 2 + (squareSize / 2 - ballRadius) * Math.cos(angle); // 减去小球半径，避免溢出
+            const startY = squareSize / 2 + (squareSize / 2 - ballRadius) * Math.sin(angle);
+            ball.style.left = `${startX}px`;
+            ball.style.top = `${startY}px`;
+
+            // 小球运动
+            const speed = 1; // 小球速度
+            let dx = Math.cos(angle) * speed;
+            let dy = Math.sin(angle) * speed;
+
+            // 将小球对象存储到数组中
+            const ballObj = {
+                element: ball,
+                x: startX,
+                y: startY,
+                dx: dx,
+                dy: dy,
+            };
+            balls.push(ballObj);
+            ballCount++;
+
+            // 更新小球位置
+            function updateBall() {
+                // 获取正方形的旋转角度
+                const squareRotation = (square.style.transform.match(/rotate\(([-\d.]+)deg\)/) || [0, 0])[1];
+                const rotation = -squareRotation * (Math.PI / 180); // 转换为弧度
+
+                // 将小球的位置转换为旋转后的坐标系
+                const rotatedX = (ballObj.x - squareSize / 2) * Math.cos(rotation) - (ballObj.y - squareSize / 2) * Math.sin(rotation) + squareSize / 2;
+                const rotatedY = (ballObj.x - squareSize / 2) * Math.sin(rotation) + (ballObj.y - squareSize / 2) * Math.cos(rotation) + squareSize / 2;
+
+                // 边界碰撞检测（基于旋转后的正方形坐标系）
+                if (rotatedX <= ballRadius || rotatedX >= squareSize - ballRadius) ballObj.dx *= -1;
+                if (rotatedY <= ballRadius || rotatedY >= squareSize - ballRadius) ballObj.dy *= -1;
+
+                // 更新小球位置
+                ballObj.x += ballObj.dx;
+                ballObj.y += ballObj.dy;
+                ball.style.left = `${ballObj.x}px`;
+                ball.style.top = `${ballObj.y}px`;
+
+                // 检测小球之间的碰撞
+                for (let otherBall of balls) {
+                    if (otherBall === ballObj) continue; // 跳过自身
+                    const dist = Math.sqrt((ballObj.x - otherBall.x) ** 2 + (ballObj.y - otherBall.y) ** 2);
+                    if (dist <= ballRadius * 2) {
+                        // 小球碰撞，交换速度
+                        [ballObj.dx, otherBall.dx] = [otherBall.dx, ballObj.dx];
+                        [ballObj.dy, otherBall.dy] = [otherBall.dy, ballObj.dy];
+                    }
+                }
+
+                requestAnimationFrame(updateBall);
+            }
+
+            updateBall();
+        }
+
+        // 定时生成小球
+        let delay = 1000; // 初始延迟 1 秒
+        function generateBalls() {
+            if (ballCount < maxBalls) {
+                createBall();
+                delay = Math.min(delay + 1000, 3000); // 延迟增加，最多 3 秒
+                setTimeout(generateBalls, delay);
+            }
+        }
+
+        generateBalls();
+    </script>
+</body>
+</html>
