@@ -16,8 +16,8 @@
         }
 
         .square {
-            width: 50vw;
-            height: 50vw;
+            width: 30vw; /* 正方形宽度调整为屏幕的 30% */
+            height: 30vw;
             border: 2px solid white;
             position: relative;
             animation: rotate 10s linear infinite;
@@ -112,8 +112,21 @@
                 const rotatedY = (ballObj.x - squareSize / 2) * Math.sin(rotation) + (ballObj.y - squareSize / 2) * Math.cos(rotation) + squareSize / 2;
 
                 // 边界碰撞检测（基于旋转后的正方形坐标系）
-                if (rotatedX <= ballRadius || rotatedX >= squareSize - ballRadius) ballObj.dx *= -1;
-                if (rotatedY <= ballRadius || rotatedY >= squareSize - ballRadius) ballObj.dy *= -1;
+                if (rotatedX <= ballRadius) {
+                    ballObj.x = ballRadius; // 确保小球不会超出左边界
+                    ballObj.dx *= -1; // 反弹
+                } else if (rotatedX >= squareSize - ballRadius) {
+                    ballObj.x = squareSize - ballRadius; // 确保小球不会超出右边界
+                    ballObj.dx *= -1; // 反弹
+                }
+
+                if (rotatedY <= ballRadius) {
+                    ballObj.y = ballRadius; // 确保小球不会超出上边界
+                    ballObj.dy *= -1; // 反弹
+                } else if (rotatedY >= squareSize - ballRadius) {
+                    ballObj.y = squareSize - ballRadius; // 确保小球不会超出下边界
+                    ballObj.dy *= -1; // 反弹
+                }
 
                 // 更新小球位置
                 ballObj.x += ballObj.dx;
