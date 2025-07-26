@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/three/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uevent@2/browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.min.js"></script>
+
+    <title>小鲁小陈新家</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            font-family: Arial, sans-serif;
+        }
+        
+        #viewer {
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            font-family: Arial, sans-serif;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 100;
+            max-width: 400px;
+        }
+        
+        .image-selector-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px;
+            border-radius: 5px;
+            z-index: 100;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: #4CAF50 rgba(0, 0, 0, 0.5);
+        }
+        
+        .image-selector-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .image-selector-container::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 4px;
+        }
+        
+        .image-selector-container::-webkit-scrollbar-thumb {
+            background: #4CAF50;
+            border-radius: 4px;
+        }
+        
+        .image-selector {
+            display: flex;
+            gap: 10px;
+            padding: 5px;
+            min-width: max-content;
+        }
+        
+        .image-selector button {
+            background: #555;
+            color: white;
+            border: none;
+            padding: 5px 6px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 11px;
+            /* 允许文字换行 */
+            white-space: normal;
+            text-align: center;
+            /* 设置固定宽度以控制换行 */
+            width: 50px;
+            /* 设置最小高度 */
+            min-height: 40px;
+            /* 设置行高 */
+            line-height: 1.2;
+            transition: background 0.3s;
+        }
+        
+        .image-selector button:hover {
+            background: #777;
+        }
+        
+        .image-selector button.active {
+            background: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div id="viewer"></div>
+    <div class="loading" id="loading"></div>
+    
+    <div class="image-selector-container">
+        <div class="image-selector" id="imageSelector"></div>
+    </div>
+    
+    <script>
+        // 图片数组，每个元素是图片的路径
+        const panoramas = [
+            './images/1.jpeg',
+            './images/2.jpeg',
+            './images/3.jpeg',
+            './images/4.jpeg',
+            './images/5.jpeg',
+            './images/6.jpeg',
+            './images/7.jpeg',
+            './images/8.jpeg',
+            './images/9.jpeg',
+            './images/10.jpeg',
+            './images/11.jpeg',
+            './images/12.jpeg',
+            './images/13.jpeg',
+            './images/14.jpeg',
+            './images/15.jpeg',
+            './images/16.jpeg',
+            './images/17.jpeg',
+            './images/18.jpeg',
+            './images/19.jpeg',
+            './images/21.jpeg',
+            './images/22.jpeg',
+            './images/23.jpeg',
+            './images/24.jpeg',
+            './images/25.jpeg',
+        ];
+        
+        // 图片标题数组（用于显示在切换按钮上）
+        const titles = [
+            "地下室一",
+            "地下室二",
+            "北入户门",
+            "入户",
+            "一楼卫生间",
+            "客餐厅",
+            "厨房",
+            "花园",
+            "楼梯口",
+            "电梯井",
+            "一二楼楼梯平台",
+            "二楼过道",
+            "二楼次卧卫生间",
+            "二楼次卧",
+            "二楼主卧卫生间",
+            "二楼主卧衣帽间",
+            "二楼主卧",
+            "二楼阳台",
+            "二三楼楼梯平台",
+            "三楼过道",
+            "三楼储藏间",
+            "三楼主卧",
+            "三楼卫生间",
+            "三楼主卧",
+            "三楼阳台",
+        ];
+        
+        let viewer = null;
+        
+        // 初始化全景查看器
+        function initViewer(panoramaPath) {
+            if (viewer) {
+                // 如果查看器已存在，更换图片
+                viewer.setPanorama(panoramaPath);
+                document.getElementById('loading').style.display = 'block';
+            } else {
+                // 创建新的查看器
+                viewer = new PhotoSphereViewer.Viewer({
+                    container: document.querySelector('#viewer'),
+                    panorama: panoramaPath,
+                    navbar: [
+                        'autorotate',
+                        'zoom',
+                        'move',
+                        'fullscreen'
+                    ],
+                    // 设置默认缩放级别为最小
+                    defaultZoomLvl: 0,
+                    loadingImg: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', // 透明像素
+                    caption: '720度全景图片查看',
+                    loadingTxt: ''
+                });
+                
+                // 图片加载完成后隐藏加载提示
+                viewer.addEventListener('ready', function() {
+                    document.getElementById('loading').style.display = 'none';
+                });
+                
+                // 添加错误处理
+                viewer.addEventListener('error', function(e) {
+                    console.error('加载全景图片时出错:', e);
+                    document.getElementById('loading').innerHTML = '加载全景图片失败，请通过HTTP服务器访问此页面';
+                });
+            }
+        }
+        
+        // 切换图片
+        function switchPanorama(index) {
+            // 更新按钮状态
+            document.querySelectorAll('.image-selector button').forEach((btn, i) => {
+                if (i === index) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            // 切换全景图片
+            initViewer(panoramas[index]);
+        }
+        
+        // 创建图片切换栏
+        function createImageSelector() {
+            const selector = document.getElementById('imageSelector');
+            selector.innerHTML = '';
+            
+            panoramas.forEach((path, index) => {
+                const button = document.createElement('button');
+                button.textContent = titles[index] || `图片${index + 1}`;
+                button.addEventListener('click', () => switchPanorama(index));
+                
+                // 默认第一个按钮为激活状态
+                if (index === 0) {
+                    button.classList.add('active');
+                }
+                
+                selector.appendChild(button);
+            });
+        }
+        
+        // 等待页面加载完成后初始化
+        window.addEventListener('load', function() {
+            // 创建图片切换栏
+            createImageSelector();
+            
+            // 初始化第一个全景图片
+            initViewer(panoramas[0]);
+        });
+    </script>
+</body>
+</html>
